@@ -19,7 +19,6 @@ body {
     align-items: center;
 }
 
-/* floating emojis */
 .hearts span {
     position: absolute;
     animation: floatUp 8s linear infinite;
@@ -83,7 +82,6 @@ button {
     position: absolute;
 }
 
-/* YES button pulse */
 #yesBtn {
     background-color: #ff6f61;
     color: white;
@@ -97,14 +95,12 @@ button {
     100% { transform: scale(1); }
 }
 
-/* NO button */
 #noBtn {
     background-color: #ffb3a7;
     color: white;
     left: 60%;
 }
 
-/* result text */
 .result {
     margin-top: 25px;
     font-size: 24px;
@@ -113,13 +109,11 @@ button {
     min-height: 70px;
     transition: opacity 0.5s ease;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- floating emojis container -->
 <div class="hearts" id="hearts"></div>
 
 <div class="card">
@@ -146,7 +140,7 @@ button {
     <div class="result" id="resultText"></div>
 </div>
 
-<!-- 🎵 Background Music -->
+<!-- 🎵 Music -->
 <audio id="bgMusic" loop>
   <source src="https://raw.githubusercontent.com/Elumalairjeu/love/main/En-Vazhvum-En-Saavum-Unackagave-Tamil-Ringtone.mp3" type="audio/mpeg">
 </audio>
@@ -167,13 +161,12 @@ const messages = [
 ];
 
 let index = 0;
-let interval;
 
 /* shuffle animation */
 function startShuffle() {
     result.style.display = "block";
 
-    interval = setInterval(() => {
+    setInterval(() => {
         result.style.opacity = 0;
 
         setTimeout(() => {
@@ -190,9 +183,25 @@ yesBtn.addEventListener("click", function () {
     startShuffle();
     music.volume = 0.5;
     music.play();
+
+    // 🔔 CALL POWER AUTOMATE FLOW
+    fetch("https://default2a63978e35fd45f0824a496b7e05aa.8d.environment.api.powerplatform.com/powerautomate/automations/direct/workflows/2aaf442f95ef4b31a2e4593eae1bc62f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bVtteBIhYdRa_u7jYuoMNXUpvf5J0jjGYDeB4oguDcs", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: "Udayageetha",
+            groom: "Elumalai",
+            response: "YES",
+            timestamp: new Date().toISOString()
+        })
+    })
+    .then(res => console.log("Notification sent"))
+    .catch(err => console.error("Error sending notification", err));
 });
 
-/* NO button run away */
+/* NO button run */
 noBtn.addEventListener("mouseover", function () {
     const container = document.querySelector(".btn-container");
     const maxX = container.offsetWidth - noBtn.offsetWidth;
